@@ -44,7 +44,8 @@ const initialState = {
     documentNumber: '',
     tariff: '',
     email: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    promo: ''
 };
 
 const initialStateValidation = {
@@ -70,11 +71,12 @@ function underAgeValidate(birthday) {
 
 
 export default function ({ setPassengersCount, passengersCount, number, deletedCount, setDeletedCount, handleSubmitForms, jsonPassengers, setJsonPassengers }) {
-    const [{ firstName, lastName, surName, sex, birthdayDate, citizen, documentType, documentNumber, tariff, email, phoneNumber },
+    const [{ firstName, lastName, surName, sex, birthdayDate, citizen, documentType, documentNumber, tariff, email, phoneNumber, promo },
         setState] = useState(initialState)
     const validator = { firstName, lastName, surName, sex, birthdayDate, citizen, documentType, documentNumber, tariff }
     const [{ citizenValidation, documentTypeValidation, documentNumberValidation, tariffValidation },] = useState(initialStateValidation)
     const [errorMessage, setErrorMessage] = useState({})
+    const [promoCode, setPromoCode] = useState(false)
     const [disabledForm, setDisabledForm] = useState(false)
     const [disabled, setDisabled] = useState(false)
 
@@ -91,6 +93,10 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
         tariff,
         email,
         phoneNumber
+    }
+
+    if (promoCode && promoCode !== '') {
+        passenger.promo = promo
     }
 
     const mount = useRef(false)
@@ -377,12 +383,24 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
             </div>
             <Form.Field>
                 <div className={styles.formField}>
-                    <input type="checkbox" />
+                    <input type="checkbox" checked={promoCode} onChange={() => setPromoCode(promoCode => !promoCode)} />
                     <label className={styles.bold} htmlFor="">
                         Указать номер бонусной, электронной, дорожной карты, делового проездного или промокода'
-                </label>
+                    </label>
                 </div>
             </Form.Field>
+            {promoCode
+                ? <Form.Field >
+                    <label>Промо код</label>
+                    <Form.Input
+                        required={true}
+                        name="promo"
+                        value={promo}
+                        onChange={onChange}
+                        error={errorMessage.promo ? true : false}
+                        type="text" />
+                </Form.Field>
+                : null}
         </Form>
         <footer className={styles.footer} style={{ display: disabled ? 'none' : null }}>
             {passengersCount - deletedCount === number
