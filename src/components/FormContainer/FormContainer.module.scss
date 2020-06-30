@@ -1,0 +1,94 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 10vh;
+  align-items: center;
+}
+
+.deleteButton {
+  color: red;
+  padding-bottom: 2px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  border-bottom: 1px dotted red;
+}
+
+.deleteButton:hover {
+  border: none;
+}
+
+.subscribe {
+  margin-top: 30px;
+  border-bottom: 1px dotted #000;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(3, 30%);
+  justify-content: space-between;
+  span {
+    font-weight: 700;
+  }
+  .ui .form .field {
+    height: 30px;
+  }
+}
+
+label::after {
+  font-size: 24px;
+  transform: rotate(-180deg);
+  vertical-align: baseline;
+
+  /* Legacy vendor prefixes that you probably don't need... */
+
+  /* Safari */
+  -webkit-transform: rotate(-180deg);
+
+  /* Firefox */
+  -moz-transform: rotate(-180deg);
+
+  /* IE */
+  -ms-transform: rotate(-180deg);
+
+  /* Opera */
+  -o-transform: rotate(-180deg);
+}
+
+.dropdown {
+  width: 100%;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.footer {
+  border-top: 4px solid #bdbdbd;
+  margin: 30px 0;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.formField {
+  @extend .mgt10;
+  display: flex;
+  align-items: center;
+  label {
+    margin-left: 5px;
+  }
+}
+
+.mgt20 {
+  margin-top: 20px;
+}
+.mgt10 {
+  margin-top: 10px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.error {
+  font-weight: 700;
+  color: red;
+}

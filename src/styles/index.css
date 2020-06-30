@@ -1,0 +1,19 @@
+@import 'normalize.css';
+
+.container {
+  width: 1280px;
+  margin: 0 auto;
+}
+
+.successMessage {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.successMessage h1 {
+  color:green;
+  font-weight: 700;
+  font-style: 72px;
+}
