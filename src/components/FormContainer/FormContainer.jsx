@@ -48,17 +48,6 @@ const initialState = {
     promo: ''
 };
 
-const initialStateValidation = {
-    firstNameValidation: false,
-    lastNameValidation: false,
-    surNameValidation: false,
-    sexValidation: false,
-    birthdayDateValidation: false,
-    citizenValidation: false,
-    documentTypeValidation: false,
-    documentNumberValidation: false,
-    tariffValidation: false
-};
 
 function underAgeValidate(birthday) {
     const current = moment(new Date(Date.now())).format('l').split('/')
@@ -74,35 +63,36 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
     const [{ firstName, lastName, surName, sex, birthdayDate, citizen, documentType, documentNumber, tariff, email, phoneNumber, promo },
         setState] = useState(initialState)
     const validator = { firstName, lastName, surName, sex, birthdayDate, citizen, documentType, documentNumber, tariff }
-    const [{ citizenValidation, documentTypeValidation, documentNumberValidation, tariffValidation },] = useState(initialStateValidation)
     const [errorMessage, setErrorMessage] = useState({})
     const [promoCode, setPromoCode] = useState(false)
     const [disabledForm, setDisabledForm] = useState(false)
     const [disabled, setDisabled] = useState(false)
 
-    const passenger = {
-        id: number,
-        firstName,
-        lastName,
-        surName,
-        sex,
-        birthdayDate,
-        citizen,
-        documentType,
-        documentNumber,
-        tariff,
-        email,
-        phoneNumber
-    }
-
-    if (promoCode && promoCode !== '') {
-        passenger.promo = promo
-    }
 
     const mount = useRef(false)
 
     const disabledButton = useMemo(() => {
         if (!mount.current) return true
+
+        const passenger = {
+            id: number,
+            firstName,
+            lastName,
+            surName,
+            sex,
+            birthdayDate,
+            citizen,
+            documentType,
+            documentNumber,
+            tariff,
+            email,
+            phoneNumber
+        }
+
+        if (promoCode && promoCode !== '') {
+            passenger.promo = promo
+        }
+
         let status = false
         for (let key in errorMessage) {
             if (errorMessage[key] && !(key === 'email' || key === 'phoneNumber')) {
@@ -131,6 +121,24 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
 
     const handleAddPassenger = () => {
         if (!disabledButton) {
+            const passenger = {
+                id: number,
+                firstName,
+                lastName,
+                surName,
+                sex,
+                birthdayDate,
+                citizen,
+                documentType,
+                documentNumber,
+                tariff,
+                email,
+                phoneNumber
+            }
+
+            if (promoCode && promoCode !== '') {
+                passenger.promo = promo
+            }
             setJsonPassengers([...jsonPassengers, passenger])
             setPassengersCount(passengersCount + 1)
             setDisabled(true)
@@ -222,7 +230,7 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
                     break
                 }
                 case 'email': {
-                    const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    const pattern = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                     if (!pattern.test(obj[key])) {
                         setErrorMessage(prevState => ({ ...prevState, [key]: 'Недопустимый формат' }))
                         status = false
@@ -231,6 +239,7 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
                     }
                     break
                 }
+                default: return obj
             }
         }
         return status
@@ -239,6 +248,24 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
     const handleSubmit = e => {
         e.preventDefault();
         if (checkValidation()) {
+            const passenger = {
+                id: number,
+                firstName,
+                lastName,
+                surName,
+                sex,
+                birthdayDate,
+                citizen,
+                documentType,
+                documentNumber,
+                tariff,
+                email,
+                phoneNumber
+            }
+
+            if (promoCode && promoCode !== '') {
+                passenger.promo = promo
+            }
             handleSubmitForms(passenger)
         }
     };
@@ -306,7 +333,7 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
                         onChange={onChange}
                         value={birthdayDate}
                         type='date'
-                        error={errorMessage.birthdayDate} />
+                        error={errorMessage.birthdayDate ? true : false} />
                 </Form.Field>
                 <Form.Field
                     name="citizen"
@@ -314,23 +341,40 @@ export default function ({ setPassengersCount, passengersCount, number, deletedC
                     label='Гражданство'
                     control='select'
                     value={citizen}
-                    onChange={onChange}
-                    error={citizenValidation}>
+                    onChange={onChange}>
                     {country.map(item => <option key={item.key} value={item.value}>{item.text}</option>)}
                 </Form.Field>
             </Form.Group>
 
             <Form.Group widths='equal'>
-                <Form.Field required name="documentType" onChange={onChange} label='Тип документа' value={documentType} control='select' error={documentTypeValidation}>
+                <Form.Field
+                    required
+                    name="documentType"
+                    onChange={onChange}
+                    label='Тип документа'
+                    value={documentType}
+                    control='select'>
                     {documents.map(item => <option key={item.key} value={item.value}>{item.text}</option>)}
                 </Form.Field>
                 <Form.Field required>
                     <label><span className={styles.label}>Номер документа</span></label>
-                    <Form.Input required={true} name="documentNumber" onChange={onChange} value={documentNumber} type='number' default='' error={documentNumberValidation} />
+                    <Form.Input
+                        required
+                        name="documentNumber"
+                        onChange={onChange}
+                        value={documentNumber}
+                        type='number' default=''
+                        error={errorMessage.documentNumber ? true : false} />
                     <div className={styles.error}>{errorMessage.documentNumber ? errorMessage.documentNumber : null}</div>
                 </Form.Field>
-                <Form.Field required name="tariff"
-                    onChange={onChange} label='Тариф' value={tariff} control='select' error={tariffValidation}>
+                <Form.Field
+                    required
+                    name="tariff"
+                    onChange={onChange}
+                    label='Тариф'
+                    value={tariff}
+                    control='select'
+                    error={errorMessage.tariff ? true : false}>
                     {tariffs.map(item => <option key={item.key} value={item.value}>{item.text}</option>)}
                 </Form.Field>
             </Form.Group>
